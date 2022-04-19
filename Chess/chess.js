@@ -2,7 +2,15 @@ const BOARD_SIZE = 8;
 const WHITE_TEAM = 'White';
 const BLACK_TEAM = 'Black';
 
+const PAWN = 'Pawn';
+const ROOK = 'Rook';
+const KNIGHT = 'Knight';
+const BISHOP = 'Bishop';
+const QUEEN = 'Queen';
+const KING = 'King';
+
 let selectedCell;
+let table;
 
 let pieces = [];
 class Piece {
@@ -21,22 +29,22 @@ function getInitialBoard() {
   addPieces(result, 7, BLACK_TEAM);
 
   for (let i = 0 ; i < BOARD_SIZE ; i++) {
-    result.push(new Piece(1, i, "Pawn", WHITE_TEAM));
-    result.push(new Piece(6, i, "Pawn", BLACK_TEAM));
+    result.push(new Piece(1, i, PAWN, WHITE_TEAM));
+    result.push(new Piece(6, i, PAWN, BLACK_TEAM));
   }
 
   return result;
 }
 
 function addPieces(result, row, team) {
-  result.push(new Piece(row, 0, "Rook", team));
-  result.push(new Piece(row, 7, "Rook", team));
-  result.push(new Piece(row, 1, "Knight", team));
-  result.push(new Piece(row, 6, "Knight", team));
-  result.push(new Piece(row, 2, "Bishop", team));
-  result.push(new Piece(row, 5, "Bishop", team));
-  result.push(new Piece(row, 4, "King", team));
-  result.push(new Piece(row, 3, "Queen", team));
+  result.push(new Piece(row, 0, ROOK, team));
+  result.push(new Piece(row, 7, ROOK, team));
+  result.push(new Piece(row, 1, KNIGHT, team));
+  result.push(new Piece(row, 6, KNIGHT, team));
+  result.push(new Piece(row, 2, BISHOP, team));
+  result.push(new Piece(row, 5, BISHOP, team));
+  result.push(new Piece(row, 4, KING, team));
+  result.push(new Piece(row, 3, QUEEN, team));
 }
 
 function addImage(cell, team, type) { 
@@ -47,15 +55,15 @@ function addImage(cell, team, type) {
 
 function addImageByIndex(cell, team, index) {
   if (index === 0 || index === 7) {
-    addImage(cell, team, 'rook');
+    addImage(cell, team, ROOK);
   } else if (index === 1 || index === 6) {
-    addImage(cell, team, 'knight');
+    addImage(cell, team, KNIGHT);
   } else if (index === 2 || index === 5) {
-    addImage(cell, team, 'bishop');
+    addImage(cell, team, BISHOP);
   } else if (index === 3) {
-    addImage(cell, team, 'queen');
+    addImage(cell, team, QUEEN);
   } else if (index === 4) {
-    addImage(cell, team, 'king');
+    addImage(cell, team, KING);
   }
 }
 
@@ -73,10 +81,10 @@ function createChessBoard() {
   const containerDiv = document.createElement('div');
   containerDiv.className = 'containerDiv';
   document.body.appendChild(containerDiv);
-  const table1 = document.createElement('table');
-  containerDiv.appendChild(table1);
+  table = document.createElement('table');
+  containerDiv.appendChild(table);
   for (let i = 0; i < BOARD_SIZE; i++) {
-    const row = table1.insertRow();
+    const row = table.insertRow();
     for (let j = 0; j < BOARD_SIZE; j++) {
       const cell = row.insertCell();
       cell.id = "cell-" + i.toString() + "_" + j.toString();
@@ -91,7 +99,7 @@ function createChessBoard() {
   pieces = getInitialBoard();
 
   for(let piece of pieces) {
-    addImage(table1.rows[piece.row].cells[piece.col], piece.team, piece.type);
+    addImage(table.rows[piece.row].cells[piece.col], piece.team, piece.type);
   }
 }
 
