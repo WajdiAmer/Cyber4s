@@ -1,0 +1,162 @@
+#leftpanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: lightgrey;
+  border:solid 1px lightblue;
+  width: 160px;
+  height: 2000px;
+  padding-left: 8px;
+  margin: 0px;
+}
+
+#leftpanel-contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 160px;
+  height: 170px;
+}
+
+#upperpanel {
+  position: absolute;
+  top: 8px;
+  left: 178px;
+  background-color: lightgrey;
+  border: solid 1px lightblue;
+  height: 140px;
+  width: 1700px;
+}
+
+#searchbarpanel{
+  position: relative;
+  top: 20px;
+  left: 50px;
+}
+
+#titlepanel {
+  position: absolute;
+  top: 200px;
+  left: 230px;
+  width: 1300px;
+}
+
+#contentpanel {
+  position: absolute;
+  top: 330px;
+  left: 250px;
+  width: 1250px;
+}
+
+#toc {
+  position: absolute;
+  top: 530px;
+  left: 300px;
+  background: lightgrey;
+  border: solid 1px black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#toclist {
+  margin-right: 20px;
+}
+
+/* For nesting counters in ordered lists */
+ol {
+  counter-reset: item;
+}
+
+.toclistitem {
+  display: block;
+}
+
+.toclistitem:before {
+  content: counters(item, ".") " ";
+  counter-increment: item;
+}
+
+/* till here */
+
+#rightpanel {
+  position: absolute;
+  top: 330px;
+  left: 1600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: lightgrey;
+  border: 1px solid black;
+}
+
+#rightpaneltitle {
+  font-weight: 700;
+  font-size: 19px;
+}
+#rptitlediv {
+  width: 210px;
+  height: 30px;
+  background-color: lightgreen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#rp2ndtitle {
+  font-weight: 700;
+}
+#rp2ndtitlediv {
+  width: 210px;
+  height: 30px;
+  background-color: lightgreen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#sclist {
+  list-style: none;
+}
+
+#etymologypanel {
+  position: absolute;
+  top: 800px;
+  left: 250px;
+  width: 1250px;
+}
+
+#descriptionpanel {
+  position: absolute;
+  top: 1030px;
+  left: 250px;
+  width: 1250px;
+}
+
+#descriptionpic1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 1120px;
+  left: 1600px;
+  background-color: lightgrey;
+  width: 230px;
+  height: 360px;
+  border: 1px solid black;
+}
+
+#descriptionpic2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 1500px;
+  left: 1600px;
+  background-color: lightgrey;
+  width: 230px;
+  height: 210px;
+  border: 1px solid black;
+}
