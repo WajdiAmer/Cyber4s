@@ -1,26 +1,65 @@
 const BOARD_SIZE = 8;
-const WHITE_TYPE = 'White';
-const BLACK_TYPE = 'Black';
+const WHITE_TEAM = 'White';
+const BLACK_TEAM = 'Black';
 
 let selectedCell;
 
-function addImage(cell, type, name) {
+let pieces = [];
+class Piece {
+  constructor(row, col, type, team) {
+    this.row = row;
+    this.col = col;
+    this.type = type;
+    this.team = team;
+  }
+}
+
+function getInitialBoard() {
+  let result = [];
+  
+  result.push(new Piece(0, 0, "Rook", WHITE_TEAM));
+  result.push(new Piece(0, 7, "Rook", WHITE_TEAM));
+  result.push(new Piece(0, 1, "Knight", WHITE_TEAM));
+  result.push(new Piece(0, 6, "Knight", WHITE_TEAM));
+  result.push(new Piece(0, 2, "Bishop", WHITE_TEAM));
+  result.push(new Piece(0, 5, "Bishop", WHITE_TEAM));
+  result.push(new Piece(0, 4, "King", WHITE_TEAM));
+  result.push(new Piece(0, 3, "Queen", WHITE_TEAM));
+  
+  result.push(new Piece(7, 0, "Rook", BLACK_TEAM));
+  result.push(new Piece(7, 7, "Rook", BLACK_TEAM));
+  result.push(new Piece(7, 1, "Knight", BLACK_TEAM));
+  result.push(new Piece(7, 6, "Knight", BLACK_TEAM));
+  result.push(new Piece(7, 2, "Bishop", BLACK_TEAM));
+  result.push(new Piece(7, 5, "Bishop", BLACK_TEAM));
+  result.push(new Piece(7, 4, "King", BLACK_TEAM));
+  result.push(new Piece(7, 3, "Queen", BLACK_TEAM));
+
+  for (let i = 0 ; i < BOARD_SIZE ; i++) {
+    result.push(new Piece(1, i, "Pawn", WHITE_TEAM));
+    result.push(new Piece(6, i, "Pawn", BLACK_TEAM));
+  }
+
+  return result;
+}
+
+function addImage(cell, team, type) { 
   const image = document.createElement('img');
-  image.src = './chessPieces/' + type + '/' + name + '.png';
+  image.src = './chessPieces/' + team + '/' + type + '.png';
   cell.appendChild(image);
 }
 
-function addImageByIndex(cell, type, index) {
+function addImageByIndex(cell, team, index) {
   if (index === 0 || index === 7) {
-    addImage(cell, type, 'rook');
+    addImage(cell, team, 'rook');
   } else if (index === 1 || index === 6) {
-    addImage(cell, type, 'knight');
+    addImage(cell, team, 'knight');
   } else if (index === 2 || index === 5) {
-    addImage(cell, type, 'bishop');
+    addImage(cell, team, 'bishop');
   } else if (index === 3) {
-    addImage(cell, type, 'queen');
+    addImage(cell, team, 'queen');
   } else if (index === 4) {
-    addImage(cell, type, 'king');
+    addImage(cell, team, 'king');
   }
 }
 
@@ -29,7 +68,7 @@ function onCellClick(e) {
   if (selectedCell !== undefined) {
     selectedCell.classList.remove('selectedCell');
   }
-  
+
   selectedCell = e.currentTarget;
   selectedCell.classList.add('selectedCell');
 }
@@ -51,17 +90,12 @@ function createChessBoard() {
         cell.className = 'darkCell';
       }
         cell.addEventListener('click', onCellClick);
-
-      if (i === 0) {
-        addImageByIndex(cell, WHITE_TYPE, j);
-      } else if (i === 1) {
-        addImage(cell, WHITE_TYPE, 'pawn');
-      } else if (i === 6) {
-        addImage(cell, BLACK_TYPE, 'pawn');
-      } else if (i === 7) {
-        addImageByIndex(cell, BLACK_TYPE, j);
-      }
     }
+  }
+  pieces = getInitialBoard();
+
+  for(let piece of pieces) {
+    addImage(table1.rows[piece.row].cells[piece.col], piece.team, piece.type);
   }
 }
 
