@@ -16,24 +16,9 @@ class Piece {
 
 function getInitialBoard() {
   let result = [];
-  
-  result.push(new Piece(0, 0, "Rook", WHITE_TEAM));
-  result.push(new Piece(0, 7, "Rook", WHITE_TEAM));
-  result.push(new Piece(0, 1, "Knight", WHITE_TEAM));
-  result.push(new Piece(0, 6, "Knight", WHITE_TEAM));
-  result.push(new Piece(0, 2, "Bishop", WHITE_TEAM));
-  result.push(new Piece(0, 5, "Bishop", WHITE_TEAM));
-  result.push(new Piece(0, 4, "King", WHITE_TEAM));
-  result.push(new Piece(0, 3, "Queen", WHITE_TEAM));
-  
-  result.push(new Piece(7, 0, "Rook", BLACK_TEAM));
-  result.push(new Piece(7, 7, "Rook", BLACK_TEAM));
-  result.push(new Piece(7, 1, "Knight", BLACK_TEAM));
-  result.push(new Piece(7, 6, "Knight", BLACK_TEAM));
-  result.push(new Piece(7, 2, "Bishop", BLACK_TEAM));
-  result.push(new Piece(7, 5, "Bishop", BLACK_TEAM));
-  result.push(new Piece(7, 4, "King", BLACK_TEAM));
-  result.push(new Piece(7, 3, "Queen", BLACK_TEAM));
+
+  addPieces(result, 0, WHITE_TEAM);
+  addPieces(result, 7, BLACK_TEAM);
 
   for (let i = 0 ; i < BOARD_SIZE ; i++) {
     result.push(new Piece(1, i, "Pawn", WHITE_TEAM));
@@ -41,6 +26,17 @@ function getInitialBoard() {
   }
 
   return result;
+}
+
+function addPieces(result, row, team) {
+  result.push(new Piece(row, 0, "Rook", team));
+  result.push(new Piece(row, 7, "Rook", team));
+  result.push(new Piece(row, 1, "Knight", team));
+  result.push(new Piece(row, 6, "Knight", team));
+  result.push(new Piece(row, 2, "Bishop", team));
+  result.push(new Piece(row, 5, "Bishop", team));
+  result.push(new Piece(row, 4, "King", team));
+  result.push(new Piece(row, 3, "Queen", team));
 }
 
 function addImage(cell, team, type) { 
