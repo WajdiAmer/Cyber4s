@@ -1,91 +1,55 @@
+const BOARD_SIZE = 8;
+const WHITE_TYPE = 'White';
+const BLACK_TYPE = 'Black';
 
-const containerDiv = document.createElement("div");
-containerDiv.className = "containerDiv";
-document.body.appendChild(containerDiv);
+function addImage(cell, type, name) {
+  const image = document.createElement('img');
+  image.src = './chessPieces/' + type + '/' + name + '.png';
+  cell.appendChild(image);
+}
 
-const chessTable = document.createElement("table");
-containerDiv.appendChild(chessTable);
+function addImageByIndex(cell, type, index) {
+  if (index === 0 || index === 7) {
+    addImage(cell, type, 'rook');
+  } else if (index === 1 || index === 6) {
+    addImage(cell, type, 'knight');
+  } else if (index === 2 || index === 5) {
+    addImage(cell, type, 'bishop');
+  } else if (index === 3) {
+    addImage(cell, type, 'queen');
+  } else if (index === 4) {
+    addImage(cell, type, 'king');
+  }
+}
 
-
-function rowStartDark(row) {
-    for(let i=0; i<8; i++) {
-      if(i % 2 == 0) {
-        let chessTile = row.insertCell(i);
-        chessTile.className = "darkTile";
+function createChessBoard() {
+  const containerDiv = document.createElement('div');
+  containerDiv.className = 'containerDiv';
+  document.body.appendChild(containerDiv);
+  const table1 = document.createElement('table');
+  containerDiv.appendChild(table1);
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    const row = table1.insertRow();
+    for (let j = 0; j < BOARD_SIZE; j++) {
+      const cell = row.insertCell();
+      cell.id = "cell-" + i.toString() + "_" + j.toString();
+      if ((i + j) % 2 === 0) {
+        cell.className = 'lightCell';
+      } else {
+        cell.className = 'darkCell';
       }
-      else {
-        let chessTile = row.insertCell(i);
-        chessTile.className = "lightTile";
+
+      if (i === 0) {
+        addImageByIndex(cell, WHITE_TYPE, j);
+      } else if (i === 1) {
+        addImage(cell, WHITE_TYPE, 'pawn');
+      } else if (i === 6) {
+        addImage(cell, BLACK_TYPE, 'pawn');
+      } else if (i === 7) {
+        addImageByIndex(cell, BLACK_TYPE, j);
       }
     }
   }
-
-  function rowStartLight(row) {
-      for(let i=0; i<8; i++) {
-        if(i % 2 == 0) {
-          let chessTile = row.insertCell(i);
-          chessTile.classList.add("lightTile");
-        }
-        else {
-          let chessTile = row.insertCell(i);
-          chessTile.classList.add("darkTile");
-        }
-      }
-  }
-
-for(let i=0; i<8; i++) {
-  let chessRow = chessTable.insertRow(i);
-  if (i % 2 == 0) {
-    rowStartDark(chessRow);
-  }
-  else {
-    rowStartLight(chessRow);
-  }
 }
 
-// let tiles = document.getElementsByTagName("td");
-let tiles = document.querySelectorAll('td');
-
-function insertPiece(color, type, index) {
-  let piece = document.createElement("img");
-  piece.src = "./chessPieces/" + color + "/" + type + ".png";
-  tiles[index].appendChild(piece);
-}
-
-const blackKing = insertPiece("black", "King", 4);
-const blackQueen = insertPiece("black", "Queen", 3);
-const blackBishop1 = insertPiece("black", "Bishop", 2);
-const blackBishop2 = insertPiece("black", "Bishop", 5);
-const blackKnight1 = insertPiece("black", "Knight", 1);
-const blackKnight2 = insertPiece("black", "Knight", 6);
-const blackRook1 = insertPiece("black", "Rook", 0);
-const blackRook2 = insertPiece("black", "Rook", 7);
-const blackPawn = [0, 1, 2, 3, 4, 5, 6, 7];
-for (let i = 0 ; i < 8 ; i++) {
-  blackPawn[i] = insertPiece("black", "Pawn", i+8);
-}
-
-const whiteKing = insertPiece("white", "King", 60);
-const whiteQueen = insertPiece("white", "Queen", 59);
-const whiteBishop1 = insertPiece("white", "Bishop", 58);
-const whiteBishop2 = insertPiece("white", "Bishop", 61);
-const whiteKnight1 = insertPiece("white", "Knight", 57);
-const whiteKnight2 = insertPiece("white", "Knight", 62);
-const whiteRook1 = insertPiece("white", "Rook", 56);
-const whiteRook2 = insertPiece("white", "Rook", 63);
-const whitePawn = [0, 1, 2, 3, 4, 5, 6, 7];
-for (let i = 0 ; i < 8 ; i++) {
-  whitePawn[i] = insertPiece("white", "Pawn", i+48);
-}
-
-let selectedTile;
-
-function onTileClick(e) {
-  if (selectedTile !== undefined) {
-    selectedTile.classList.remove('selectedTile');
-  }
-  selectedTile = e.currentTarget;
-  selectedTile.classList.add('selectedTile');
-}
-
-tiles.forEach(tile => { tile.addEventListener('click', onTileClick);});
+window.addEventListener('load', createChessBoard);
