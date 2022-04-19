@@ -35,3 +35,6 @@ table {
     /* border: 1px solid white; */
 }
 
+.selectedTile {
+    background: rgb(122, 122, 67);
+}

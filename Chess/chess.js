@@ -43,8 +43,8 @@ for(let i=0; i<8; i++) {
   }
 }
 
-let tiles = document.getElementsByTagName("td");
-console.log(tiles);         //remove later
+// let tiles = document.getElementsByTagName("td");
+let tiles = document.querySelectorAll('td');
 
 function insertPiece(color, type, index) {
   let piece = document.createElement("img");
@@ -77,3 +77,15 @@ const whitePawn = [0, 1, 2, 3, 4, 5, 6, 7];
 for (let i = 0 ; i < 8 ; i++) {
   whitePawn[i] = insertPiece("white", "Pawn", i+48);
 }
+
+let selectedTile;
+
+function onTileClick(e) {
+  if (selectedTile !== undefined) {
+    selectedTile.classList.remove('selectedTile');
+  }
+  selectedTile = e.currentTarget;
+  selectedTile.classList.add('selectedTile');
+}
+
+tiles.forEach(tile => { tile.addEventListener('click', onTileClick);});
