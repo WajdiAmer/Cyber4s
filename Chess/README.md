@@ -1,2 +1,3 @@
-# chessBoard2
-Chess Board made with only JS.
+# Chess
+Chess Board made with mostly JS.
+The Original Development Repo: https://github.com/WajdiAmer/chessBoard2
