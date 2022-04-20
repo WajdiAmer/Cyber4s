@@ -28,7 +28,7 @@ class Piece {
     } else if (this.type === ROOK) {
       relativeMoves = this.getRookRelativeMoves();
     } else if (this.type === KNIGHT) {
-      // TODO: Get moves
+      relativeMoves = this.getKnightRelativeMoves();
     } else if (this.type === BISHOP) {
       relativeMoves = this.getBishopRelativeMoves();
     } else if (this.type === KING) {
@@ -80,6 +80,12 @@ class Piece {
     let kingResult = [];
     kingResult.push([-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]); // can be done also by two loops and a condition (to exclude [0,0])
     return kingResult;
+  }
+
+  getKnightRelativeMoves() {
+    let knightResult = [];
+    knightResult.push([1,2], [2, 1], [1,-2], [2, -1], [-1,2], [-2, 1], [-1,-2], [-2, -1]); 
+    return knightResult;
   }
 
   getBishopRelativeMoves() {
