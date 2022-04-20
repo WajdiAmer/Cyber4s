@@ -152,11 +152,11 @@ function createChessBoard() {
     const rowElement = table.insertRow();
     for (let col = 0; col < BOARD_SIZE; col++) {
       const cell = rowElement.insertCell();
-      cell.id = "cell-" + row.toString() + "_" + col.toString();
+      // cell.id = "cell-" + row.toString() + "_" + col.toString();     // Get cell place by Piece Class instead
       if ((row + col) % 2 === 0) {
-        cell.className = 'lightCell';
-      } else {
         cell.className = 'darkCell';
+      } else {
+        cell.className = 'lightCell';
       }
         cell.addEventListener('click', (e) => onCellClick(e, row, col));
     }
@@ -164,8 +164,9 @@ function createChessBoard() {
   pieces = getInitialBoard();
 
   for(let piece of pieces) {
+          // (     Cell Place by [row, col]       )
     addImage(table.rows[piece.row].cells[piece.col], piece.team, piece.type);
   }
 }
 
-window.addEventListener('load', createChessBoard);
+createChessBoard();
