@@ -152,7 +152,7 @@ function createChessBoard() {
     const rowElement = table.insertRow();
     for (let col = 0; col < BOARD_SIZE; col++) {
       const cell = rowElement.insertCell();
-      // cell.id = "cell-" + row.toString() + "_" + col.toString();     // Get cell place by Piece Class instead
+      // cell.id = "cell-" + row.toString() + "_" + col.toString();     // COMMENTED BECAUSE: Switched to get cell place by Piece Class instead
       if ((row + col) % 2 === 0) {
         cell.className = 'darkCell';
       } else {
