@@ -30,11 +30,11 @@ class Piece {
     } else if (this.type === KNIGHT) {
       // TODO: Get moves
     } else if (this.type === BISHOP) {
-      // TODO: Get moves
+      relativeMoves = this.getBishopRelativeMoves();
     } else if (this.type === KING) {
-      // TODO: Get moves
+      relativeMoves = this.getKingRelativeMoves();
     } else if (this.type === QUEEN) {
-      // TODO: Get moves
+      relativeMoves = this.getQueenRelativeMoves();
     } else {
       console.log("Unknown type", type)
     }
@@ -58,19 +58,52 @@ class Piece {
   }
 
   getPawnRelativeMoves() {
-      // TODO: Give different answer to black player
-      return [[1, 0]];
+      let direction = 1;
+      if (this.team === BLACK_TEAM) {
+        direction = -1;
+      }
+      return [[1 * direction, 0]];
 }
 
   getRookRelativeMoves() {
-    let result = [];
+    let rookResult = [];
     for (let i = 1; i < BOARD_SIZE; i++) {
-      result.push([i, 0]);
-      result.push([-i, 0]);
-      result.push([0, i]);
-      result.push([0, -i]);
+      rookResult.push([i, 0]);
+      rookResult.push([-i, 0]);
+      rookResult.push([0, i]);
+      rookResult.push([0, -i]);
   }
-  return result;
+  return rookResult;
+  }
+
+  getKingRelativeMoves() {
+    let kingResult = [];
+    kingResult.push([-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]); // can be done also by two loops and a condition (to exclude [0,0])
+    return kingResult;
+  }
+
+  getBishopRelativeMoves() {
+    let bishopResult = [];
+    for (let i = 1; i < BOARD_SIZE; i++) {
+      bishopResult.push([i, i]);
+      bishopResult.push([i, -i]);
+      bishopResult.push([-i, i]);
+      bishopResult.push([-i, -i]);
+  }
+    return bishopResult;
+  }
+
+  getQueenRelativeMoves() {         // The Queen moves like The Rook and The Bishop combined so we get their movements and add them into The Queen movements
+    let queenResult = [];
+    let bishopResults = this.getBishopRelativeMoves();
+    let rookResults = this.getRookRelativeMoves();
+    
+    queenResult = bishopResults;           // Adding the Bishop movements first
+    for (let rookResult of rookResults) {  // Then adding the Rook movements like this in order to add them as array values and not as random numbers
+      queenResult.push(rookResult);
+    }
+
+    return queenResult;
   }
 }
 
