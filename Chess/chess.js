@@ -76,12 +76,6 @@ class Piece {
   return rookResult;
   }
 
-  getKingRelativeMoves() {
-    let kingResult = [];
-    kingResult.push([-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]); // can be done also by two loops and a condition (to exclude [0,0])
-    return kingResult;
-  }
-
   getKnightRelativeMoves() {
     let knightResult = [];
     knightResult.push([1,2], [2, 1], [1,-2], [2, -1], [-1,2], [-2, 1], [-1,-2], [-2, -1]); 
@@ -97,6 +91,12 @@ class Piece {
       bishopResult.push([-i, -i]);
   }
     return bishopResult;
+  }
+
+  getKingRelativeMoves() {
+    let kingResult = [];
+    kingResult.push([-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]); // can be done also by two loops and a condition (to exclude [0,0])
+    return kingResult;
   }
 
   getQueenRelativeMoves() {         // The Queen moves like The Rook and The Bishop combined so we get their movements and add them into The Queen movements
