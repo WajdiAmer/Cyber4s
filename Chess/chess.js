@@ -1,7 +1,6 @@
 const BOARD_SIZE = 8;
 const WHITE_TEAM = 'White';
 const BLACK_TEAM = 'Black';
-
 const PAWN = 'Pawn';
 const ROOK = 'Rook';
 const KNIGHT = 'Knight';
@@ -11,8 +10,8 @@ const KING = 'King';
 
 let selectedCell;
 let table;
+let boardData;
 
-let pieces = [];
 class Piece {
   constructor(row, col, type, team) {
     this.row = row;
@@ -36,7 +35,7 @@ class Piece {
     } else if (this.type === QUEEN) {
       relativeMoves = this.getQueenRelativeMoves();
     } else {
-      console.log("Unknown type", type)
+      console.log("Error: Unknown type", this.type)
     }
 
     let absoluteMoves = [];
@@ -58,11 +57,13 @@ class Piece {
   }
 
   getPawnRelativeMoves() {
-      let direction = 1;
-      if (this.team === BLACK_TEAM) {
-        direction = -1;
+      if (this.team === WHITE_TEAM) {
+        return [[1, 0]];
+      } else if (this.team === BLACK_TEAM) {
+        return [[-1, 0]];
+      } else {
+        console.log("Error: Unknown team - ", this.team);
       }
-      return [[1 * direction, 0]];
 }
 
   getRookRelativeMoves() {
@@ -113,17 +114,21 @@ class Piece {
   }
 }
 
-                //BOARD DATA TASK..
-// class BoardData {
-//   constructor(pieces) {
-//     this.pieces = pieces;
-//   }
 
-//   // Returns piece in row, col, or undefined if not exists.
-//   getPiece(row, col) {
+class BoardData {
+  constructor(pieces) {
+    this.pieces = pieces;
+  }
 
-//   }
-// }
+  // Returns piece in row, col, or undefined if not exists.
+  getPiece(row, col) {
+    for (const piece of this.pieces) {
+      if (piece.row === row && piece.col === col) {
+        return piece;
+      }
+    }
+  }
+}
 
 
 function getInitialBoard() {
@@ -165,11 +170,11 @@ function onCellClick(e, row, col) {
     }
   }
   
-  for (let piece of pieces) {
-    if (piece.row === row && piece.col === col) {
-      let possibleMoves = piece.getPossibleMoves();
-      for (let possibleMove of possibleMoves)
-      table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possibleMovement');
+  const piece = boardData.getPiece(row, col);
+  if (piece !== undefined) {
+    let possibleMoves = piece.getPossibleMoves();
+    for (let possibleMove of possibleMoves) {
+    table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possibleMovement');
     }
   }
 
@@ -191,7 +196,6 @@ function createChessBoard() {
     const rowElement = table.insertRow();
     for (let col = 0; col < BOARD_SIZE; col++) {
       const cell = rowElement.insertCell();
-      // cell.id = "cell-" + row.toString() + "_" + col.toString();     // COMMENTED BECAUSE: Switched to get cell place by Piece Class instead
       if ((row + col) % 2 === 0) {
         cell.className = 'darkCell';
       } else {
@@ -200,9 +204,9 @@ function createChessBoard() {
         cell.addEventListener('click', (e) => onCellClick(e, row, col));
     }
   }
-  pieces = getInitialBoard();
+  boardData = new BoardData(getInitialBoard());
 
-  for(let piece of pieces) {
+  for(let piece of boardData.pieces) {
           // (     Cell Place by [row, col]       )
     addImage(table.rows[piece.row].cells[piece.col], piece.team, piece.type);
   }
