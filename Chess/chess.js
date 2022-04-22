@@ -1,3 +1,7 @@
+
+//TODO: - Learn more about JS Classes and understand them.
+//      - Reordering, renaming, designing...
+
 const BOARD_SIZE = 8;
 const WHITE_TEAM = 'White';
 const BLACK_TEAM = 'Black';
@@ -35,7 +39,7 @@ class Piece {
     } else if (this.type === QUEEN) {
       relativeMoves = this.getQueenRelativeMoves();
     } else {
-      console.log("Error: Unknown type", this.type)
+      console.log("Error: Unknown type", this.type);
     }
 
     let absoluteMoves = [];
@@ -120,7 +124,6 @@ class BoardData {
     this.pieces = pieces;
   }
 
-  // Returns piece in row, col, or undefined if not exists.
   getPiece(row, col) {
     for (const piece of this.pieces) {
       if (piece.row === row && piece.col === col) {
