@@ -1,6 +1,6 @@
 
 //TODO: - Learn more about JS Classes and understand them.
-//      - Reordering, renaming, designing...
+//      - 
 
 const BOARD_SIZE = 8;
 const WHITE_TEAM = 'White';
@@ -113,7 +113,6 @@ class Piece {
     for (let rookResult of rookResults) {  // Then adding the Rook movements like this in order to add them as array values and not as random numbers
       queenResult.push(rookResult);
     }
-
     return queenResult;
   }
 }
@@ -173,6 +172,7 @@ function onCellClick(e, row, col) {
     }
   }
   
+  
   const piece = boardData.getPiece(row, col);
   if (piece !== undefined) {
     let possibleMoves = piece.getPossibleMoves();
@@ -188,6 +188,7 @@ function onCellClick(e, row, col) {
   selectedCell = e.currentTarget;
   selectedCell.classList.add('selectedCell');
 }
+
 
 function createChessBoard() {
   const containerDiv = document.createElement('div');
