@@ -1,6 +1,8 @@
 
 //TODO: - Learn more about JS Classes and understand them.
-//      - 
+//      - King and Knight extract to function
+//      - Hover mouse cursor pointer style just for cells with pieces
+
 
 const BOARD_SIZE = 8;
 const WHITE_TEAM = 'White';
@@ -24,33 +26,40 @@ class Piece {
     this.team = team;
   }
 
-  getPossibleMoves() {
-    let relativeMoves;
+  getOpponent() {
+    if(this.team === WHITE_TEAM) {
+      return BLACK_TEAM;
+    }
+    return WHITE_TEAM;
+  }
+
+  getPossibleMoves(boardData) {
+    let moves;
     if (this.type === PAWN) {
-      relativeMoves = this.getPawnRelativeMoves();
+      moves = this.getPawnMoves(boardData);
     } else if (this.type === ROOK) {
-      relativeMoves = this.getRookRelativeMoves();
+      moves = this.getRookMoves(boardData);
     } else if (this.type === KNIGHT) {
-      relativeMoves = this.getKnightRelativeMoves();
+      moves = this.getKnightMoves(boardData);
     } else if (this.type === BISHOP) {
-      relativeMoves = this.getBishopRelativeMoves();
+      moves = this.getBishopMoves(boardData);
     } else if (this.type === KING) {
-      relativeMoves = this.getKingRelativeMoves();
+      moves = this.getKingMoves(boardData);
     } else if (this.type === QUEEN) {
-      relativeMoves = this.getQueenRelativeMoves();
+      moves = this.getQueenMoves(boardData);
     } else {
       console.log("Error: Unknown type", this.type);
     }
 
-    let absoluteMoves = [];
-    for (let relativeMove of relativeMoves) {
-      const absoluteRow = this.row + relativeMove[0];
-      const absoluteCol = this.col + relativeMove[1];
-      absoluteMoves.push([absoluteRow, absoluteCol]);
-    }
+    // let absoluteMoves = [];
+    // for (let relativeMove of relativeMoves) {
+    //   const absoluteRow = this.row + relativeMove[0];
+    //   const absoluteCol = this.col + relativeMove[1];
+    //   absoluteMoves.push([absoluteRow, absoluteCol]);
+    // }
 
     let filteredMoves = [];
-    for (let absoluteMove of absoluteMoves) {
+    for (let absoluteMove of moves) {
       const absoluteRow = absoluteMove[0];
       const absoluteCol = absoluteMove[1];
       if (absoluteRow >= 0 && absoluteRow <= 7 && absoluteCol >= 0 && absoluteCol <= 7) {
@@ -60,59 +69,109 @@ class Piece {
     return filteredMoves;
   }
 
-  getPawnRelativeMoves() {
-      if (this.team === WHITE_TEAM) {
-        return [[1, 0]];
-      } else if (this.team === BLACK_TEAM) {
-        return [[-1, 0]];
+  getPawnMoves(boardData) {
+    let result = [];
+    let direction;
+      if (this.team === BLACK_TEAM) {
+        direction = -1;
+      } else if (this.team === WHITE_TEAM) {
+        direction = 1;
       } else {
         console.log("Error: Unknown team - ", this.team);
       }
+
+      let nextMove = [this.row + direction, this.col];
+      if (boardData.isEmpty(nextMove[0], nextMove[1])) {
+        result.push(nextMove);
+      }
+
+      nextMove = [this.row + direction, this.col + direction];
+      if (boardData.isPlayer(nextMove[0], nextMove[1], this.getOpponent())) {
+        result.push(nextMove);
+      }
+
+      nextMove = [this.row + direction, this.col - direction];
+      if (boardData.isPlayer(nextMove[0], nextMove[1], this.getOpponent())) {
+        result.push(nextMove);
+      }
+
+      return result;
 }
 
-  getRookRelativeMoves() {
+
+  
+getMovesInDirection(directionRow, directionCol, boardData) {
+  let result = [];
+
+  for (let i = 1; i < BOARD_SIZE; i++) {
+    let row = this.row + directionRow * i;
+    let col = this.col + directionCol * i;
+    if (boardData.isEmpty(row, col)) {
+      result.push([row, col]);
+    } else if (boardData.isPlayer(row, col, this.getOpponent())) {
+      result.push([row, col]);
+      return result;
+    } else if (boardData.isPlayer(row, col, this.team)) {
+      return result;
+    }
+  }
+  return result;
+  }
+
+  getRookMoves(boardData) {
     let rookResult = [];
-    for (let i = 1; i < BOARD_SIZE; i++) {
-      rookResult.push([i, 0]);
-      rookResult.push([-i, 0]);
-      rookResult.push([0, i]);
-      rookResult.push([0, -i]);
-  }
-  return rookResult;
+    rookResult = rookResult.concat(this.getMovesInDirection(-1, 0, boardData));
+    rookResult = rookResult.concat(this.getMovesInDirection(1, 0, boardData));
+    rookResult = rookResult.concat(this.getMovesInDirection(0, -1, boardData));
+    rookResult = rookResult.concat(this.getMovesInDirection(0, 1, boardData));
+    return rookResult;
   }
 
-  getKnightRelativeMoves() {
-    let knightResult = [];
-    knightResult.push([1,2], [2, 1], [1,-2], [2, -1], [-1,2], [-2, 1], [-1,-2], [-2, -1]); 
-    return knightResult;
-  }
-
-  getBishopRelativeMoves() {
+  
+  getBishopMoves(boardData) {
     let bishopResult = [];
-    for (let i = 1; i < BOARD_SIZE; i++) {
-      bishopResult.push([i, i]);
-      bishopResult.push([i, -i]);
-      bishopResult.push([-i, i]);
-      bishopResult.push([-i, -i]);
-  }
+    bishopResult = bishopResult.concat(this.getMovesInDirection(1, 1, boardData));
+    bishopResult = bishopResult.concat(this.getMovesInDirection(1, -1, boardData));
+    bishopResult = bishopResult.concat(this.getMovesInDirection(-1, 1, boardData));
+    bishopResult = bishopResult.concat(this.getMovesInDirection(-1, -1, boardData));
     return bishopResult;
   }
 
-  getKingRelativeMoves() {
+
+  getKnightMoves() {
+    let knightResult = [];
+
+    const relativeMoves = [[1,2], [2, 1], [1,-2], [2, -1], [-1,2], [-2, 1], [-1,-2], [-2, -1]];
+    for (let relativeMove of relativeMoves) {
+      let row = this.row + relativeMove[0];
+      let col = this.col + relativeMove[1];
+      if (!boardData.isPlayer(row, col, this.team)) {
+        knightResult.push([row, col]);
+      }
+    }
+    return knightResult;
+  }
+
+
+  getKingMoves() {
     let kingResult = [];
-    kingResult.push([-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]); // can be done also by two loops and a condition (to exclude [0,0])
+
+    const relativeMoves = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+    for (let relativeMove of relativeMoves) {
+      let row = this.row + relativeMove[0];
+      let col = this.col + relativeMove[1];
+      if (!boardData.isPlayer(row, col, this.team)) {
+        kingResult.push([row, col]);
+      }
+    }
     return kingResult;
   }
 
-  getQueenRelativeMoves() {         // The Queen moves like The Rook and The Bishop combined so we get their movements and add them into The Queen movements
+
+  getQueenMoves(boardData) {         // The Queen moves like The Rook and The Bishop combined so we get their movements and add them into The Queen movements
     let queenResult = [];
-    let bishopResults = this.getBishopRelativeMoves();
-    let rookResults = this.getRookRelativeMoves();
-    
-    queenResult = bishopResults;           // Adding the Bishop movements first
-    for (let rookResult of rookResults) {  // Then adding the Rook movements like this in order to add them as array values and not as random numbers
-      queenResult.push(rookResult);
-    }
+    queenResult = this.getBishopMoves(boardData);
+    queenResult = queenResult.concat(this.getRookMoves(boardData));
     return queenResult;
   }
 }
@@ -129,6 +188,15 @@ class BoardData {
         return piece;
       }
     }
+  }
+
+  isEmpty(row, col) {
+    return this.getPiece(row, col) === undefined;
+  }
+
+  isPlayer(row, col, team) {
+    const piece = this.getPiece(row, col);
+    return piece !== undefined && piece.team === team;
   }
 }
 
@@ -175,7 +243,7 @@ function onCellClick(e, row, col) {
   
   const piece = boardData.getPiece(row, col);
   if (piece !== undefined) {
-    let possibleMoves = piece.getPossibleMoves();
+    let possibleMoves = piece.getPossibleMoves(boardData);
     for (let possibleMove of possibleMoves) {
     table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possibleMovement');
     }
