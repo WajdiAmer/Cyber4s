@@ -40,3 +40,7 @@ table {
 .possibleMovement {
     background: rgb(122, 39, 39);
 }
+
+.piece:hover {
+    cursor: pointer;
+}

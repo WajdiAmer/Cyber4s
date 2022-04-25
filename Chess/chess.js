@@ -1,7 +1,7 @@
 
-//TODO: - Learn more about JS Classes and understand them.
+//TODO:
 //      - King and Knight extract to function
-//      - Hover mouse cursor pointer style just for cells with pieces
+//      - Hover mouse cursor pointer style just for cells with pieces (started)
 
 
 const BOARD_SIZE = 8;
@@ -13,8 +13,9 @@ const KNIGHT = 'Knight';
 const BISHOP = 'Bishop';
 const QUEEN = 'Queen';
 const KING = 'King';
+const CHESS_BOARD = 'chess-board'
 
-let selectedCell;
+let selectedPiece;
 let table;
 let boardData;
 
@@ -50,13 +51,6 @@ class Piece {
     } else {
       console.log("Error: Unknown type", this.type);
     }
-
-    // let absoluteMoves = [];
-    // for (let relativeMove of relativeMoves) {
-    //   const absoluteRow = this.row + relativeMove[0];
-    //   const absoluteCol = this.col + relativeMove[1];
-    //   absoluteMoves.push([absoluteRow, absoluteCol]);
-    // }
 
     let filteredMoves = [];
     for (let absoluteMove of moves) {
@@ -198,6 +192,22 @@ class BoardData {
     const piece = this.getPiece(row, col);
     return piece !== undefined && piece.team === team;
   }
+  
+  removePiece(row, col) {
+    for (let i = 0; i < this.pieces.length; i++) {
+      const piece = this.pieces[i];
+      if (piece.row === row && piece.col === col) {
+        this.pieces.splice(i, 1);
+      }
+    }
+  }
+
+  // addHover(row, col) {
+  //   const piece = this.getPiece(row, col);
+  //   if (piece !== this.isEmpty) {
+  //   piece.classList.add('piece:hover');
+  //   } 
+  // }
 }
 
 
@@ -232,37 +242,65 @@ function addImage(cell, team, type) {
   cell.appendChild(image);
 }
 
-
-function onCellClick(e, row, col) {
+function showMovesForPiece(row, col) {
   for (let i = 0; i < BOARD_SIZE; i++) {
     for (let j = 0; j < BOARD_SIZE; j++) {
       table.rows[i].cells[j].classList.remove('possibleMovement');
+      table.rows[i].cells[j].classList.remove('selectedCell');
     }
   }
-  
-  
+
   const piece = boardData.getPiece(row, col);
   if (piece !== undefined) {
     let possibleMoves = piece.getPossibleMoves(boardData);
     for (let possibleMove of possibleMoves) {
-    table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possibleMovement');
+      table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possibleMovement');
     }
   }
-
-  if (selectedCell !== undefined) {
-    selectedCell.classList.remove('selectedCell');
-  }
-
-  selectedCell = e.currentTarget;
-  selectedCell.classList.add('selectedCell');
+  table.rows[row].cells[col].classList.add('selectedCell');
+  selectedPiece = piece;
 }
 
+function onCellClick(e, row, col) {
+  if (selectedPiece === undefined) {
+    showMovesForPiece(row, col);
+  } else if (tryMove(selectedPiece, row, col)) {
+    selectedPiece = undefined;
+    createChessBoard(boardData);
+  } else {
+    showMovesForPiece(row, col);
+  }
+}
 
-function createChessBoard() {
+function tryMove(piece, row, col) {
+  const possibleMoves = piece.getPossibleMoves(boardData);
+  for (const possibleMove of possibleMoves) {
+    if (possibleMove[0] === row && possibleMove[1] === col) {
+      boardData.removePiece(row, col);
+      piece.row = row;
+      piece.col = col;
+      return true;
+    }
+  }
+  return false;
+}
+
+function initGame() {
+  boardData = new BoardData(getInitialBoard());
+  createChessBoard(boardData);
+}
+
+function createChessBoard(boardData) {
+  table = document.getElementById(CHESS_BOARD);
+  if (table !== null) {
+    table.remove();
+  }
+
   const containerDiv = document.createElement('div');
   containerDiv.className = 'containerDiv';
   document.body.appendChild(containerDiv);
   table = document.createElement('table');
+  table.id = CHESS_BOARD;
   containerDiv.appendChild(table);
   for (let row = 0; row < BOARD_SIZE; row++) {
     const rowElement = table.insertRow();
@@ -276,7 +314,6 @@ function createChessBoard() {
         cell.addEventListener('click', (e) => onCellClick(e, row, col));
     }
   }
-  boardData = new BoardData(getInitialBoard());
 
   for(let piece of boardData.pieces) {
           // (     Cell Place by [row, col]       )
@@ -284,4 +321,4 @@ function createChessBoard() {
   }
 }
 
-createChessBoard();
+initGame();
