@@ -73,7 +73,7 @@ function initGame() {
   createChessBoard(gameManager.boardData);
 }
 
-function createChessBoard(boardData) {
+function createChessBoard() {
   table = document.getElementById(CHESS_BOARD);
   if (table !== null) {
     table.remove();
@@ -98,7 +98,7 @@ function createChessBoard(boardData) {
     }
   }
 
-  for(let piece of boardData.getInitialBoard()) {
+  for(let piece of gameManager.boardData.pieces) {
           // (     Cell Place by [row, col]       )
     addImage(table.rows[piece.row].cells[piece.col], piece.team, piece.type);
   }

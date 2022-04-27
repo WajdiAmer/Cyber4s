@@ -119,7 +119,7 @@ getMovesInDirection(directionRow, directionCol, boardData) {
     for (let relativeMove of relativeMoves) {
       let row = this.row + relativeMove[0];
       let col = this.col + relativeMove[1];
-      if (!boardData.isPlayer(row, col, this.team)) {
+      if (!gameManager.boardData.isPlayer(row, col, this.team)) {
         knightResult.push([row, col]);
       }
     }
@@ -134,7 +134,7 @@ getMovesInDirection(directionRow, directionCol, boardData) {
     for (let relativeMove of relativeMoves) {
       let row = this.row + relativeMove[0];
       let col = this.col + relativeMove[1];
-      if (!boardData.isPlayer(row, col, this.team)) {
+      if (!gameManager.boardData.isPlayer(row, col, this.team)) {
         kingResult.push([row, col]);
       }
     }
