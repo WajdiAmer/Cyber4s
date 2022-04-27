@@ -1,7 +1,6 @@
 
 //TODO:
 //      - King and Knight extract to function
-//      - Hover mouse cursor pointer style just for cells with pieces (started)
 
 
 const BOARD_SIZE = 8;
@@ -34,6 +33,7 @@ function addPieces(result, row, team) {
 function addImage(cell, team, type) { 
   const image = document.createElement('img');
   image.src = './chessPieces/' + team + '/' + type + '.png';
+  image.draggable = false;
   cell.appendChild(image);
 }
 
@@ -101,6 +101,14 @@ function createChessBoard() {
   for(let piece of gameManager.boardData.pieces) {
           // (     Cell Place by [row, col]       )
     addImage(table.rows[piece.row].cells[piece.col], piece.team, piece.type);
+  }
+
+  if(gameManager.winner !== undefined) {
+    const winnerPopup = document.createElement('div');
+    winnerPopup.textContent = gameManager.winner + ' Player Wins!';
+    winnerPopup.classList.add('winnerPopup');
+    table.appendChild(winnerPopup);
+    // cell.classList.remove('td:hover');
   }
 }
 

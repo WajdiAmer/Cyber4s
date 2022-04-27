@@ -39,6 +39,7 @@ class BoardData {
       const piece = this.pieces[i];
       if (piece.row === row && piece.col === col) {
         this.pieces.splice(i, 1);
+        return piece;
       }
     }
   }

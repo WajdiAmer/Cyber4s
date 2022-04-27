@@ -4,7 +4,7 @@ class Piece {
     this.col = col;
     this.type = type;
     this.team = team;
-    this.opponent = this.getOpponent()
+    this.opponent = this.getOpponent();
   }
 
   getOpponent() {
