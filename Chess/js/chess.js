@@ -17,22 +17,8 @@ const CHESS_BOARD = 'chess-board'
 
 let selectedPiece;
 let table;
-let boardData;
+let gameManager;
 
-
-function getInitialBoard() {
-  let result = [];
-
-  addPieces(result, 0, WHITE_TEAM);
-  addPieces(result, 7, BLACK_TEAM);
-
-  for (let i = 0 ; i < BOARD_SIZE ; i++) {
-    result.push(new Piece(1, i, PAWN, WHITE_TEAM));
-    result.push(new Piece(6, i, PAWN, BLACK_TEAM));
-  }
-
-  return result;
-}
 
 function addPieces(result, row, team) {
   result.push(new Piece(row, 0, ROOK, team));
@@ -59,9 +45,9 @@ function showMovesForPiece(row, col) {
     }
   }
 
-  const piece = boardData.getPiece(row, col);
+  const piece = gameManager.boardData.getPiece(row, col);
   if (piece !== undefined) {
-    let possibleMoves = piece.getPossibleMoves(boardData);
+    let possibleMoves = gameManager.getPossibleMoves(piece);
     for (let possibleMove of possibleMoves) {
       table.rows[possibleMove[0]].cells[possibleMove[1]].classList.add('possibleMovement');
     }
@@ -73,30 +59,18 @@ function showMovesForPiece(row, col) {
 function onCellClick(row, col) {
   if (selectedPiece === undefined) {
     showMovesForPiece(row, col);
-  } else if (tryMove(selectedPiece, row, col)) {
+  } else if (gameManager.tryMove(selectedPiece, row, col)) {
     selectedPiece = undefined;
-    createChessBoard(boardData);
+    createChessBoard(gameManager.boardData);
   } else {
     showMovesForPiece(row, col);
   }
 }
 
-function tryMove(piece, row, col) {
-  const possibleMoves = piece.getPossibleMoves(boardData);
-  for (const possibleMove of possibleMoves) {
-    if (possibleMove[0] === row && possibleMove[1] === col) {
-      boardData.removePiece(row, col);
-      piece.row = row;
-      piece.col = col;
-      return true;
-    }
-  }
-  return false;
-}
 
 function initGame() {
-  boardData = new BoardData(getInitialBoard());
-  createChessBoard(boardData);
+  gameManager = new GameManager(WHITE_TEAM);
+  createChessBoard(gameManager.boardData);
 }
 
 function createChessBoard(boardData) {
@@ -124,7 +98,7 @@ function createChessBoard(boardData) {
     }
   }
 
-  for(let piece of boardData.pieces) {
+  for(let piece of boardData.getInitialBoard()) {
           // (     Cell Place by [row, col]       )
     addImage(table.rows[piece.row].cells[piece.col], piece.team, piece.type);
   }

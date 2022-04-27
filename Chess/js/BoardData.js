@@ -1,6 +1,6 @@
 class BoardData {
-  constructor(pieces) {
-    this.pieces = pieces;
+  constructor() {
+    this.pieces = this.getInitialBoard();
   }
 
   getPiece(row, col) {
@@ -9,6 +9,20 @@ class BoardData {
         return piece;
       }
     }
+  }
+
+  getInitialBoard() {
+    let result = [];
+  
+    addPieces(result, 0, WHITE_TEAM);
+    addPieces(result, 7, BLACK_TEAM);
+  
+    for (let i = 0 ; i < BOARD_SIZE ; i++) {
+      result.push(new Piece(1, i, PAWN, WHITE_TEAM));
+      result.push(new Piece(6, i, PAWN, BLACK_TEAM));
+    }
+  
+    return result;
   }
 
   isEmpty(row, col) {
