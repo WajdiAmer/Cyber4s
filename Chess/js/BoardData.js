@@ -43,11 +43,4 @@ class BoardData {
       }
     }
   }
-
-  // addHover(row, col) {
-  //   const piece = this.getPiece(row, col);
-  //   if (piece !== this.isEmpty) {
-  //   piece.classList.add('piece:hover');
-  //   } 
-  // }
 }

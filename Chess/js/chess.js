@@ -1,8 +1,4 @@
 
-//TODO:
-//      - King and Knight extract to function
-
-
 const BOARD_SIZE = 8;
 const WHITE_TEAM = 'White';
 const BLACK_TEAM = 'Black';
@@ -108,7 +104,6 @@ function createChessBoard() {
     winnerPopup.textContent = gameManager.winner + ' Player Wins!';
     winnerPopup.classList.add('winnerPopup');
     table.appendChild(winnerPopup);
-    // cell.classList.remove('td:hover');
   }
 }
 
